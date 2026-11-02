@@ -67,3 +67,26 @@ Commit + Push bằng GitHub Desktop → đợi ~1 phút → mở `https://nesv03
 ~50.000 lượt đọc + 20.000 lượt ghi mỗi ngày. Mỗi hành động = 3 lượt ghi (người chơi + tổng chùa + dòng hoạt động); mỗi người online ghi thêm 1 lượt/phút để báo "đang viếng". Đủ cho vài chục người chơi đều đặn mỗi ngày.
 
 Collection `events` sẽ lớn dần. Có thể bật xoá tự động: Firestore → **TTL** → thêm policy cho collection `events` (cần thêm trường hết hạn), hoặc thỉnh thoảng xoá tay.
+
+## 🔴 Livestream TikTok (người xem bình luận / tặng quà → hiện trong chùa)
+
+Chế độ LIVE không cần đăng nhập: mỗi người xem tương tác trên TikTok sẽ hiện thành một người quỳ lễ có tên, bảng "Tấm Lòng Thành" xếp theo công đức trong ngày.
+
+| Người xem làm gì | Trong chùa |
+|---|---|
+| Vào phòng live | Hiện thành người quỳ + "X vừa vào chùa" |
+| Bình luận **thắp hương** | Dâng hương, +5 CĐ |
+| Bình luận **cầu an …** | Cầu an (hiện lời cầu ngắn), +5 CĐ |
+| Bình luận **xin xăm** | Bật quẻ xăm mang tên người đó |
+| Bình luận **chuông** / **gõ mõ** / **nam mô** | Thỉnh chuông / gõ mõ / niệm Phật, +1 CĐ |
+| Tặng quà | Dâng hoa sen, +10 CĐ mỗi xu. Quà ≥ 5 xu: mưa hoa sen + chuông |
+
+Cách chạy:
+1. Làm theo `bridge/README.md` (cài Node.js, `npm install` 1 lần).
+2. Mỗi lần live: `node server.js TEN_TIKTOK` trong thư mục `bridge`.
+3. Đưa màn hình game lên live — chọn 1 trong 2:
+   - **OBS:** thêm nguồn **Browser** → URL `http://localhost:8787/?live=1`, rộng 1080, cao 1920.
+   - **TikTok LIVE Studio:** mở `http://localhost:8787/?live=1` bằng Chrome, rồi thêm nguồn **Window Capture** (quay cửa sổ) chọn cửa sổ Chrome đó.
+4. Xem thử không cần live: `node server.js --demo`, hoặc mở trang web với `?live=demo`.
+
+Lưu ý: thư viện đọc live (`tiktok-live-connector`) là thư viện **không chính thức**; TikTok có thể đổi giao thức khiến nó ngừng chạy tạm thời. Điểm/xếp hạng LIVE lưu trong trình duyệt theo ngày (không lên Firebase).

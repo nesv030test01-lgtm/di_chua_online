@@ -1,0 +1,15 @@
+{
+  "name": "di-chua-tiktok-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Nhận bình luận / quà từ TikTok LIVE và đẩy vào game Đi Chùa Online",
+  "scripts": {
+    "start": "node server.js",
+    "demo": "node server.js --demo"
+  },
+  "dependencies": {
+    "tiktok-live-connector": "^2.5.0",
+    "ws": "^8.18.2"
+  }
+}

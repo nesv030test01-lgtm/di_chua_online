@@ -140,6 +140,21 @@ export function initPetals(n = 10) {
   }
 }
 
+/** Mưa cánh sen (khi có quà lớn) */
+export function lotusRain(n = 20) {
+  const box = $("float-layer");
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement("span");
+    p.className = "petal rain";
+    p.style.left = Math.random() * 100 + "%";
+    p.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
+    p.style.animationDuration = 2.5 + Math.random() * 2 + "s";
+    p.style.animationDelay = Math.random() * 1.2 + "s";
+    box.appendChild(p);
+    setTimeout(() => p.remove(), 5000);
+  }
+}
+
 export function floatText(text) {
   const el = document.createElement("div");
   el.className = "float";

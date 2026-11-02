@@ -19,7 +19,14 @@ const errMsg = (e) =>
     "permission-denied": "Firestore từ chối (hãy Publish lại file firestore.rules mới nhất).",
   })[e?.code] || e?.message || "Có lỗi xảy ra.";
 
-if (!isConfigured) {
+const liveMode = new URLSearchParams(location.search).get("live");
+
+if (liveMode !== null) {
+  // Chế độ LIVE TikTok — không cần đăng nhập/Firebase
+  Promise.all([import(`./ui.js?v=${V}`), import(`./xam.js?v=${V}`), import(`./live.js?v=${V}`)])
+    .then(([ui, { XAM }, live]) => { show("screen-temple"); live.startLive(ui, XAM, liveMode); })
+    .catch((e) => { console.error(e); $("loading").textContent = "Không tải được chế độ LIVE."; });
+} else if (!isConfigured) {
   $("config-warning").classList.remove("hidden");
   show("screen-login");
   ["btn-google", "btn-guest"].forEach((id) => ($(id).disabled = true));

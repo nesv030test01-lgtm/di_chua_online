@@ -329,3 +329,9 @@ h1 { font-family: "Noto Serif", serif; color: var(--gold); margin: 6px 0; }
 @media (min-width: 521px) {
   .stage { border-left: 1px solid rgba(242,207,107,.2); border-right: 1px solid rgba(242,207,107,.2); }
 }
+
+/* ---------- Chế độ LIVE TikTok ---------- */
+.petal.rain { animation-iteration-count: 1; width: 14px; height: 11px; }
+.live-mode .me-pill { cursor: default; }
+.me-pill.is-live { border-color: #ff3b5c; background: rgba(120, 10, 25, .8); }
+.live-mode .big small { font-size: 9.5px; letter-spacing: .3px; }
