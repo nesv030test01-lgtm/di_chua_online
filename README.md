@@ -91,11 +91,13 @@ Cách chạy:
 
 Lưu ý: thư viện đọc live (`tiktok-live-connector`) là thư viện **không chính thức**; TikTok có thể đổi giao thức khiến nó ngừng chạy tạm thời. Điểm/xếp hạng LIVE lưu trong trình duyệt theo ngày (không lên Firebase).
 
-## 🎵 Nhạc nền
+## 🎵 Nhạc nền (danh sách phát)
 
-Bấm nút **🎵 Bật nhạc** (góc trên bên phải). Cấu hình ở đầu file `js/music.js`:
-- Mặc định phát video YouTube bằng trình phát nhúng nhỏ (kéo thanh tiêu đề để di chuyển, ✕ để tắt). Theo quy định của YouTube, trình phát phải hiển thị, không được ẩn hay tách lấy âm thanh.
-- Đang dùng file `audio/tam-an-doi-nhe-nhang.m4a` (phát lặp lại, nhớ chỗ đang nghe). Muốn đổi bài: chép file vào `audio/` rồi sửa dòng `file:` trong `js/music.js`. Nếu file không tồn tại, game dùng YouTube.
-- Thêm `&nhac=1` vào link (vd. `http://localhost:8787/?live=1&nhac=1`) để tự bật nhạc khi mở trong OBS.
+- **Thêm bài:** chép file nhạc (.mp3, .m4a, .ogg, .wav…) vào thư mục `audio/` rồi commit + push. Game tự nhận, không cần sửa code.
+- **Thứ tự:** phát **ngẫu nhiên** (hết bài tự chuyển bài khác). Muốn phát theo tên file `01-…`, `02-…`: đổi `shuffle: true` thành `false` trong `js/music.js`.
+  Muốn tự chọn thứ tự: tạo `audio/playlist.json`, ví dụ `["02-bai-b.mp3", "01-bai-a.m4a"]`.
+- **Tự phát:** nhạc tự phát khi mở link. Nếu trình duyệt chặn (Chrome/Safari chặn âm thanh khi người xem chưa chạm vào trang), trang hiện "🔊 Chạm vào màn hình để nghe nhạc" và nhạc phát ngay ở lần chạm đầu tiên. Trong OBS dùng link có `&nhac=1` (vd. `http://localhost:8787/?live=1&nhac=1`) để tự phát.
+- Nút **⏭** chuyển bài, **🔇 Tắt nhạc** để tắt (game nhớ lựa chọn và vị trí đang nghe).
+- Nên đặt tên file **không dấu, không khoảng trắng** (vd. `03-chu-dai-bi.mp3`).
 
 ⚠️ Phát nhạc có bản quyền trên TikTok LIVE có thể bị tắt tiếng hoặc gỡ live. Nên dùng nhạc không bản quyền hoặc nhạc bạn được phép dùng.

@@ -5,7 +5,7 @@
 //
 // Sau đó mở http://localhost:8787/?live=1  (trong OBS: Browser Source, 1080×1920)
 import http from "node:http";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { WebSocketServer } from "ws";
@@ -24,6 +24,16 @@ const MIME = {
 };
 const server = http.createServer(async (req, res) => {
   let p = decodeURIComponent(new URL(req.url, "http://x").pathname);
+  if (p === "/__audio-list") {
+    // Danh sách bài nhạc trong thư mục audio/ (để game tự phát lần lượt)
+    try {
+      const files = (await readdir(path.join(ROOT, "audio")))
+        .filter((f) => /\.(mp3|m4a|aac|ogg|oga|opus|wav|webm|flac)$/i.test(f))
+        .sort((a, b) => a.localeCompare(b, "vi", { numeric: true }));
+      res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
+      return res.end(JSON.stringify(files));
+    } catch { res.writeHead(200, { "Content-Type": "application/json" }); return res.end("[]"); }
+  }
   if (p.endsWith("/")) p += "index.html";
   const file = path.join(ROOT, p);
   const rel = path.relative(ROOT, file);

@@ -1,129 +1,187 @@
-// Nhạc nền
-//  - Nếu có file nhạc (CFG.file) trong repo → phát file đó (lặp lại, nhớ vị trí đang nghe, không hiện trình phát)
-//  - Nếu không    → phát video YouTube bên dưới bằng trình phát nhúng (theo quy định của YouTube,
-//                   trình phát phải hiển thị, tối thiểu 200×200)
-// Thêm ?nhac=1 vào link để tự bật nhạc khi mở (dùng cho OBS).
+// Nhạc nền — phát lần lượt các bài trong thư mục audio/
+//
+// Thêm bài: chép file (.mp3 .m4a .ogg .wav …) vào thư mục audio/ rồi push. Không cần sửa code.
+// Phát NGẪU NHIÊN (đổi CFG.shuffle = false để phát theo tên file 01-…, 02-…).
+// Danh sách tự chọn (tuỳ chọn): audio/playlist.json, ví dụ  ["02-bai-b.mp3", "01-bai-a.m4a"]
+//
+// Tự phát: trình duyệt chặn âm thanh cho đến khi người xem chạm/bấm lần đầu → nhạc bắt đầu ngay lúc đó.
+// Trong OBS (link có &nhac=1) nhạc tự phát luôn.
 const CFG = {
-  youtubeId: "MAUTcJMEroE",
-  file: "audio/tam-an-doi-nhe-nhang.m4a",
+  folder: "audio/",
   volume: 40, // 0–100
+  exts: /\.(mp3|m4a|aac|ogg|oga|opus|wav|webm|flac)$/i,
+  shuffle: true,
 };
+const KEY = "dichua-music"; // { name, t, off }
 
-const POS_KEY = "dichua-music-pos";
+const pretty = (f) => f.replace(/\.[^.]+$/, "").replace(/^\d{2,}[\s._-]+/, "").replace(/[-_]+/g, " ").trim() || f;
+const byName = (a, b) => a.localeCompare(b, "vi", { numeric: true });
 
 export function initMusic(toast = () => {}) {
   const btn = document.getElementById("btn-music");
-  let mode = null, audio = null, player = null, panel = null, on = false;
+  const nextBtn = document.getElementById("btn-next");
+  const params = new URLSearchParams(location.search);
+
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch {} };
+
+  const audio = new Audio();
+  audio.preload = "auto";
+  audio.volume = CFG.volume / 100;
+
+  let tracks = null, i = 0, on = false, errors = 0, armed = false;
 
   const setBtn = () => {
     btn.textContent = on ? "🔇 Tắt nhạc" : "🎵 Bật nhạc";
     btn.classList.toggle("on", on);
+    btn.title = tracks?.length ? `Bài ${i + 1}/${tracks.length}: ${pretty(tracks[i])}` : "";
   };
   setBtn();
-  btn.onclick = () => (on ? stop() : start());
 
-  async function hasFile() {
-    try { return (await fetch(CFG.file, { method: "HEAD", cache: "no-store" })).ok; } catch { return false; }
+  async function load() {
+    if (!tracks) tracks = await discover();
+    return tracks;
   }
 
-  async function start() {
-    on = true; setBtn();
-    if (mode === null) mode = (await hasFile()) ? "file" : "youtube";
-    if (mode === "file") {
-      if (!audio) {
-        audio = Object.assign(new Audio(CFG.file), { loop: true, volume: CFG.volume / 100, preload: "auto" });
-        // Nghe tiếp từ chỗ lần trước
-        try {
-          const t = Number(localStorage.getItem(POS_KEY));
-          if (t > 0) audio.addEventListener("loadedmetadata", () => { if (t < audio.duration - 5) audio.currentTime = t; }, { once: true });
-        } catch {}
-        setInterval(() => { if (!audio.paused) try { localStorage.setItem(POS_KEY, String(Math.floor(audio.currentTime))); } catch {} }, 5000);
-      }
-      audio.play().catch(() => { on = false; setBtn(); toast("Bấm 🎵 Bật nhạc để nghe"); });
-    } else {
-      openYouTube();
+  function setTrack(idx, t = 0) {
+    i = ((idx % tracks.length) + tracks.length) % tracks.length;
+    audio.src = CFG.folder + tracks[i].split("/").map(encodeURIComponent).join("/");
+    if (t > 0) audio.addEventListener("loadedmetadata", () => { if (t < audio.duration - 5) audio.currentTime = t; }, { once: true });
+    saved.name = tracks[i]; saved.t = t; save();
+    setBtn();
+    if ("mediaSession" in navigator) {
+      try { navigator.mediaSession.metadata = new MediaMetadata({ title: pretty(tracks[i]), artist: "Đi Chùa Online" }); } catch {}
     }
   }
 
+  async function start() {
+    await load();
+    if (!tracks.length) { toast("Chưa có bài nhạc nào trong thư mục audio/"); return; }
+    if (!audio.src) {
+      if (CFG.shuffle) setTrack(randomOther(-1));
+      else {
+        const k = tracks.indexOf(saved.name); // nghe tiếp đúng bài lần trước
+        setTrack(k >= 0 ? k : 0, k >= 0 ? saved.t || 0 : 0);
+      }
+    }
+    on = true; saved.off = false; save(); setBtn();
+    try {
+      await audio.play();
+      hint(false);
+      toast(`🎵 ${pretty(tracks[i])}`);
+    } catch {
+      on = false; setBtn();
+      hint(true);
+      armGesture(); // trình duyệt chặn tự phát → phát ngay khi người xem chạm lần đầu
+    }
+  }
+
+  function randomOther(cur) {
+    if (tracks.length < 2) return 0;
+    let k;
+    do { k = Math.floor(Math.random() * tracks.length); } while (k === cur);
+    return k;
+  }
+
+  // Dòng nhắc "Chạm để nghe nhạc" khi trình duyệt chặn tự phát
+  let hintEl = null;
+  function hint(show) {
+    if (show && !hintEl) {
+      hintEl = document.createElement("div");
+      hintEl.className = "music-hint";
+      hintEl.textContent = "🔊 Chạm vào màn hình để nghe nhạc";
+      document.body.appendChild(hintEl);
+    } else if (!show && hintEl) { hintEl.remove(); hintEl = null; }
+  }
+
   function stop() {
-    on = false; setBtn();
-    audio?.pause();
-    try { player?.destroy(); } catch {}
-    player = null;
-    panel?.remove();
-    panel = null;
+    hint(false);
+    on = false; audio.pause();
+    saved.off = true; save(); setBtn();
   }
 
-  function openYouTube() {
-    panel = document.createElement("div");
-    panel.className = "yt-panel";
-    const head = document.createElement("div");
-    head.className = "yt-head";
-    head.textContent = "🎵 Nhạc nền (kéo để di chuyển)";
-    const close = document.createElement("button");
-    close.textContent = "✕";
-    close.title = "Tắt nhạc";
-    close.onclick = stop;
-    head.appendChild(close);
-    const slot = document.createElement("div");
-    slot.id = "yt-player";
-    panel.append(head, slot);
-    document.getElementById("stage").appendChild(panel);
-    makeDraggable(panel, head);
-
-    loadYT().then((YT) => {
-      if (!panel) return;
-      player = new YT.Player("yt-player", {
-        width: 200, height: 200,
-        videoId: CFG.youtubeId,
-        host: "https://www.youtube-nocookie.com",
-        playerVars: { autoplay: 1, loop: 1, playlist: CFG.youtubeId, playsinline: 1, rel: 0, modestbranding: 1 },
-        events: {
-          onReady: (e) => { e.target.setVolume(CFG.volume); e.target.playVideo(); },
-          onError: (e) => {
-            const msg = e.data === 101 || e.data === 150
-              ? "Chủ video không cho phép nhúng video này vào trang khác."
-              : "Không phát được video YouTube.";
-            toast(msg);
-            stop();
-          },
-        },
-      });
-    }).catch(() => { toast("Không tải được YouTube."); stop(); });
+  function next() {
+    if (!tracks?.length) return start();
+    setTrack(CFG.shuffle ? randomOther(i) : i + 1);
+    if (on) audio.play().then(() => toast(`🎵 ${pretty(tracks[i])}`)).catch(() => {});
+    else start();
   }
 
-  if (new URLSearchParams(location.search).get("nhac") === "1") start();
-}
-
-let ytPromise;
-function loadYT() {
-  if (window.YT?.Player) return Promise.resolve(window.YT);
-  ytPromise ||= new Promise((resolve, reject) => {
-    const prev = window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady = () => { prev?.(); resolve(window.YT); };
-    const s = document.createElement("script");
-    s.src = "https://www.youtube.com/iframe_api";
-    s.onerror = reject;
-    document.head.appendChild(s);
+  audio.addEventListener("ended", next);
+  audio.addEventListener("playing", () => { errors = 0; });
+  audio.addEventListener("error", () => {
+    if (!tracks?.length) return;
+    errors++;
+    if (errors >= tracks.length) { toast("Không phát được bài nào — kiểm tra lại file trong audio/"); stop(); return; }
+    toast(`Bỏ qua bài lỗi: ${pretty(tracks[i])}`);
+    setTimeout(next, 800);
   });
-  return ytPromise;
-}
+  setInterval(() => { if (on && !audio.paused) { saved.t = Math.floor(audio.currentTime); save(); } }, 5000);
 
-/** Kéo thanh tiêu đề để di chuyển trình phát */
-function makeDraggable(panel, handle) {
-  handle.addEventListener("pointerdown", (e) => {
-    if (e.target.tagName === "BUTTON") return;
-    const stage = panel.parentElement.getBoundingClientRect();
-    const start = panel.getBoundingClientRect();
-    const dx = e.clientX - start.left, dy = e.clientY - start.top;
-    handle.setPointerCapture(e.pointerId);
-    const move = (ev) => {
-      const x = Math.min(Math.max(ev.clientX - dx - stage.left, 0), stage.width - start.width);
-      const y = Math.min(Math.max(ev.clientY - dy - stage.top, 0), stage.height - start.height);
-      Object.assign(panel.style, { left: x + "px", top: y + "px", bottom: "auto" });
+  function armGesture() {
+    if (armed) return;
+    armed = true;
+    const go = (e) => {
+      if (e.target.closest?.("#btn-music, #btn-next")) return; // nút nhạc tự xử lý
+      document.removeEventListener("pointerdown", go, true);
+      document.removeEventListener("keydown", go, true);
+      armed = false;
+      if (!saved.off) start();
     };
-    const up = () => { handle.removeEventListener("pointermove", move); handle.removeEventListener("pointerup", up); };
-    handle.addEventListener("pointermove", move);
-    handle.addEventListener("pointerup", up);
-  });
+    document.addEventListener("pointerdown", go, true);
+    document.addEventListener("keydown", go, true);
+  }
+
+  btn.onclick = () => (on ? stop() : start());
+  if (nextBtn) nextBtn.onclick = () => next();
+
+  // Mặc định bật nhạc (trừ khi người xem đã tự tắt lần trước)
+  if (params.get("nhac") === "1" || !saved.off) start();
+  else load();
+}
+
+// ---- Tìm danh sách bài ----
+async function discover() {
+  const keep = (list) => list.filter((f) => typeof f === "string" && CFG.exts.test(f));
+
+  // 1) audio/playlist.json (nếu có) — tự chọn thứ tự
+  try {
+    const r = await fetch(CFG.folder + "playlist.json", { cache: "no-store" });
+    if (r.ok) {
+      const j = await r.json();
+      const list = keep(Array.isArray(j) ? j : j.tracks || []);
+      if (list.length) return list;
+    }
+  } catch {}
+
+  // 2) Chạy qua bridge trên máy (http://localhost:8787)
+  try {
+    const r = await fetch("/__audio-list", { cache: "no-store" });
+    if (r.ok) {
+      const list = keep(await r.json());
+      if (list.length) return list.sort(byName);
+    }
+  } catch {}
+
+  // 3) Trên GitHub Pages: đọc danh sách file trong thư mục audio/ của repo
+  const host = location.hostname;
+  if (host.endsWith(".github.io")) {
+    const owner = host.split(".")[0];
+    const repo = location.pathname.split("/").filter(Boolean)[0] || `${owner}.github.io`;
+    const ck = `dichua-audio-list-${repo}`;
+    try {
+      const cached = JSON.parse(sessionStorage.getItem(ck));
+      if (cached?.length) return cached;
+    } catch {}
+    try {
+      const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${CFG.folder.replace(/\/$/, "")}`);
+      if (r.ok) {
+        const list = keep((await r.json()).filter((x) => x.type === "file").map((x) => x.name)).sort(byName);
+        try { sessionStorage.setItem(ck, JSON.stringify(list)); } catch {}
+        return list;
+      }
+    } catch {}
+  }
+  return [];
 }

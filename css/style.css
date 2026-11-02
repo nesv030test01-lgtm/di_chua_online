@@ -337,7 +337,7 @@ h1 { font-family: "Noto Serif", serif; color: var(--gold); margin: 6px 0; }
 .live-mode .big small { font-size: 9.5px; letter-spacing: .3px; }
 
 /* ---------- Nhạc nền ---------- */
-.music-pill { top: calc(42px + env(safe-area-inset-top)); right: 8px; z-index: 50; }
+.music-ctl { top: calc(42px + env(safe-area-inset-top)); right: 8px; z-index: 50; display: flex; gap: 4px; }
 .music-pill.on { border-color: var(--gold); color: var(--gold); }
 .yt-panel {
   left: 8px; top: calc(80px + env(safe-area-inset-top)); z-index: 70; touch-action: none;
@@ -362,3 +362,11 @@ h1 { font-family: "Noto Serif", serif; color: var(--gold); margin: 6px 0; }
   box-shadow: inset 0 0 0 2px #7a1a10, inset 0 0 18px rgba(0, 0, 0, .35);
 }
 .holy-frame img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%; border-radius: 5px; }
+
+.music-hint {
+  position: fixed; left: 50%; top: calc(80px + env(safe-area-inset-top)); transform: translateX(-50%); z-index: 250;
+  padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 700; white-space: nowrap; pointer-events: none;
+  background: rgba(25, 6, 3, .85); border: 1px solid var(--gold); color: var(--gold);
+  animation: hintPulse 1.6s ease-in-out infinite;
+}
+@keyframes hintPulse { 50% { opacity: .55; } }

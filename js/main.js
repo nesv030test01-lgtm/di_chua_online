@@ -27,6 +27,8 @@ async function startMusic(toast) {
   musicReady = true;
   try { (await import(`./music.js?v=${V}`)).initMusic(toast); } catch (e) { console.warn(e); }
 }
+// Bật nhạc ngay khi mở trang (kể cả màn đăng nhập) — lần chạm đầu tiên sẽ mở tiếng
+import(`./ui.js?v=${V}`).then((ui) => startMusic(ui.toast)).catch(() => {});
 
 if (liveMode !== null) {
   // Chế độ LIVE TikTok — không cần đăng nhập/Firebase
