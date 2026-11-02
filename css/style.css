@@ -1,0 +1,110 @@
+:root {
+  --bg: #1b0d0b;
+  --bg2: #2a1411;
+  --red: #8f2a24;
+  --gold: #e8c76a;
+  --gold-dim: #b8963f;
+  --text: #f5ead2;
+  --muted: #bfae8c;
+  --card: rgba(255, 240, 210, 0.06);
+  --line: rgba(232, 199, 106, 0.25);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: "Noto Serif", Georgia, serif;
+  color: var(--text);
+  background: radial-gradient(ellipse at top, #4a1d16 0%, var(--bg) 60%) fixed;
+  min-height: 100vh;
+}
+.hidden { display: none !important; }
+code { background: rgba(0,0,0,.3); padding: 1px 6px; border-radius: 4px; }
+
+.banner { background: #a33; color: #fff; padding: 10px 16px; text-align: center; }
+
+.screen { min-height: 100vh; }
+#screen-login { display: grid; place-items: center; padding: 16px; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
+.login-card { max-width: 400px; width: 100%; text-align: center; }
+.lotus { font-size: 56px; }
+h1 { color: var(--gold); margin: 8px 0; letter-spacing: 1px; }
+h2 { color: var(--gold); margin: 0 0 12px; font-size: 1.15rem; }
+.sub { color: var(--muted); margin-top: 0; }
+.note { color: var(--muted); font-size: .85rem; }
+.error { color: #ff8a80; min-height: 1.2em; font-size: .9rem; }
+.muted { color: var(--muted); font-size: .85rem; }
+
+.btn {
+  font: inherit; cursor: pointer; border-radius: 999px; border: 1px solid var(--line);
+  padding: 12px 20px; width: 100%; margin-top: 12px; transition: transform .1s, opacity .2s;
+}
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn-google { background: #fff; color: #333; border-color: #fff; font-weight: 700; }
+.btn-google .g { color: #4285f4; font-weight: 900; margin-right: 6px; }
+.btn-ghost { background: transparent; color: var(--text); }
+.btn-small { width: auto; padding: 6px 14px; margin: 0; font-size: .85rem; }
+.btn-action { background: linear-gradient(#a8432f, var(--red)); color: var(--text); border-color: var(--gold-dim); font-weight: 700; }
+.btn-action small { color: var(--gold); margin-left: 4px; }
+
+.topbar {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid var(--line); background: rgba(0,0,0,.25);
+}
+.who { display: flex; gap: 10px; align-items: center; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); }
+.name { font-weight: 700; }
+.type { font-size: .8rem; color: var(--muted); }
+.stats { display: flex; gap: 18px; }
+.stat { text-align: center; }
+.stat span { display: block; color: var(--gold); font-size: 1.3rem; font-weight: 700; }
+.stat small { color: var(--muted); font-size: .75rem; }
+.actions-top { display: flex; gap: 8px; }
+
+.temple { max-width: 640px; margin: 0 auto; padding: 16px; }
+.scene { position: relative; height: 300px; }
+.pagoda { width: 100%; max-width: 360px; display: block; margin: 0 auto; filter: drop-shadow(0 0 30px rgba(232,199,106,.25)); }
+.pagoda.shake { animation: shake .6s; }
+@keyframes shake { 25% { transform: translateX(-3px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-2px); } }
+
+.altar { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 140px; height: 90px; }
+.bowl { position: absolute; bottom: 0; left: 20px; right: 20px; height: 26px; background: linear-gradient(var(--gold), var(--gold-dim)); border-radius: 0 0 50px 50px; }
+.incense { position: absolute; bottom: 22px; left: 30px; right: 30px; height: 70px; display: flex; justify-content: center; gap: 6px; }
+.stick { position: relative; width: 3px; height: 60px; background: linear-gradient(#ff6b3d 0 4px, #6b2b1a 4px); align-self: flex-end; }
+.stick.burnt { height: 30px; background: #555; }
+.stick.burnt .smoke { display: none; }
+.smoke {
+  position: absolute; bottom: 100%; left: -6px; width: 14px; height: 40px;
+  background: radial-gradient(ellipse, rgba(255,255,255,.35), transparent 70%);
+  animation: smoke 3s infinite ease-out;
+}
+@keyframes smoke { 0% { opacity: 0; transform: translateY(0) scale(.6); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-50px) translateX(8px) scale(1.5); } }
+
+.float-layer { position: absolute; inset: 0; pointer-events: none; }
+.float { position: absolute; bottom: 100px; color: var(--gold); font-weight: 700; animation: up 1.6s forwards; }
+@keyframes up { to { transform: translateY(-80px); opacity: 0; } }
+
+.controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+.controls .btn { margin: 0; }
+
+.prayer-card textarea {
+  width: 100%; font: inherit; color: var(--text); background: rgba(0,0,0,.3);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px; resize: vertical;
+}
+.prayer-card .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.prayer-card .row .btn { width: auto; }
+.prayer-list { list-style: none; padding: 0; margin: 16px 0 0; }
+.prayer-list li { padding: 10px 0; border-top: 1px dashed var(--line); font-style: italic; overflow-wrap: anywhere; }
+.prayer-list li::before { content: "🙏 "; font-style: normal; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(100px);
+  background: #000c; color: var(--text); padding: 10px 18px; border-radius: 999px; transition: transform .3s; max-width: 90vw;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.loading { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg); color: var(--gold); }
+
+@media (max-width: 520px) {
+  .stats { width: 100%; justify-content: space-around; order: 3; }
+}

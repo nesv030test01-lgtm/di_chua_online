@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+
+      // Tạo hồ sơ mới: chỉ số phải bắt đầu từ 0
+      allow create: if isOwner(uid)
+        && request.resource.data.congDuc == 0
+        && request.resource.data.soLanThapHuong == 0
+        && request.resource.data.soLanGoChuong == 0;
+
+      // Cập nhật: công đức chỉ được tăng, tối đa +10 mỗi lần ghi (chống hack điểm cơ bản)
+      allow update: if isOwner(uid)
+        && request.resource.data.congDuc >= resource.data.congDuc
+        && request.resource.data.congDuc <= resource.data.congDuc + 10;
+
+      allow delete: if false;
+
+      match /prayers/{pid} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['text', 'createdAt'])
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 300;
+        allow update, delete: if false;
+      }
+    }
+
+    // Mọi thứ khác: cấm
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

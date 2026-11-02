@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Đi Chùa Online</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Cảnh báo khi chưa cấu hình Firebase -->
+  <div id="config-warning" class="banner hidden">
+    Chưa cấu hình Firebase. Mở <code>js/firebase-config.js</code> và dán config của bạn vào (xem README.md).
+  </div>
+
+  <!-- Màn hình đăng nhập -->
+  <section id="screen-login" class="screen hidden">
+    <div class="card login-card">
+      <div class="lotus">🪷</div>
+      <h1>Đi Chùa Online</h1>
+      <p class="sub">Thắp nén hương, gõ hồi chuông, gửi lời nguyện cầu.</p>
+      <button id="btn-google" class="btn btn-google">
+        <span class="g">G</span> Đăng nhập bằng Google
+      </button>
+      <button id="btn-guest" class="btn btn-ghost">Vào chùa với tư cách khách</button>
+      <p class="note">Khách vẫn được lưu tiến trình. Bạn có thể liên kết Google sau để giữ dữ liệu khi đổi máy.</p>
+      <p id="login-error" class="error"></p>
+    </div>
+  </section>
+
+  <!-- Màn hình trong chùa -->
+  <section id="screen-temple" class="screen hidden">
+    <header class="topbar">
+      <div class="who">
+        <img id="avatar" class="avatar hidden" alt="" referrerpolicy="no-referrer" />
+        <div>
+          <div id="user-name" class="name">…</div>
+          <div id="user-type" class="type"></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span id="stat-congduc">0</span><small>Công đức</small></div>
+        <div class="stat"><span id="stat-huong">0</span><small>Nén hương</small></div>
+        <div class="stat"><span id="stat-chuong">0</span><small>Hồi chuông</small></div>
+      </div>
+      <div class="actions-top">
+        <button id="btn-link" class="btn btn-small btn-google hidden">Liên kết Google</button>
+        <button id="btn-logout" class="btn btn-small btn-ghost">Đăng xuất</button>
+      </div>
+    </header>
+
+    <main class="temple">
+      <div class="scene">
+        <svg class="pagoda" viewBox="0 0 300 220" aria-hidden="true">
+          <path d="M20 90 Q150 30 280 90 L260 95 Q150 55 40 95 Z" fill="#7a1f1f"/>
+          <path d="M20 90 Q10 80 4 70 Q20 82 40 88 Z" fill="#7a1f1f"/>
+          <path d="M280 90 Q290 80 296 70 Q280 82 260 88 Z" fill="#7a1f1f"/>
+          <rect x="55" y="95" width="190" height="16" fill="#c9a24a"/>
+          <path d="M40 130 Q150 95 260 130 L245 134 Q150 108 55 134 Z" fill="#8f2a24"/>
+          <rect x="70" y="134" width="160" height="80" fill="#a8432f"/>
+          <rect x="125" y="150" width="50" height="64" rx="25" fill="#3b120f"/>
+          <rect x="80" y="150" width="30" height="30" fill="#e8c76a" opacity=".85"/>
+          <rect x="190" y="150" width="30" height="30" fill="#e8c76a" opacity=".85"/>
+          <circle cx="150" cy="72" r="6" fill="#e8c76a"/>
+        </svg>
+
+        <div class="altar">
+          <div id="incense" class="incense"></div>
+          <div class="bowl"></div>
+        </div>
+        <div id="float-layer" class="float-layer"></div>
+      </div>
+
+      <div class="controls">
+        <button id="btn-huong" class="btn btn-action">🕯️ Thắp hương <small>+3</small></button>
+        <button id="btn-chuong" class="btn btn-action">🔔 Gõ chuông <small>+1</small></button>
+      </div>
+
+      <div class="card prayer-card">
+        <h2>Lời nguyện cầu</h2>
+        <textarea id="prayer-text" maxlength="300" rows="3" placeholder="Con xin cầu cho gia đình bình an…"></textarea>
+        <div class="row">
+          <span id="prayer-count" class="muted">0/300</span>
+          <button id="btn-pray" class="btn btn-action">🙏 Gửi lời nguyện <small>+5</small></button>
+        </div>
+        <ul id="prayer-list" class="prayer-list"></ul>
+      </div>
+    </main>
+  </section>
+
+  <div id="toast" class="toast"></div>
+  <div id="loading" class="loading">Đang mở cửa chùa…</div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
