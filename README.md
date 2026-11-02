@@ -95,7 +95,7 @@ Lưu ý: thư viện đọc live (`tiktok-live-connector`) là thư viện **kh�
 
 Bấm nút **🎵 Bật nhạc** (góc trên bên phải). Cấu hình ở đầu file `js/music.js`:
 - Mặc định phát video YouTube bằng trình phát nhúng nhỏ (kéo thanh tiêu đề để di chuyển, ✕ để tắt). Theo quy định của YouTube, trình phát phải hiển thị, không được ẩn hay tách lấy âm thanh.
-- Nếu bạn có file nhạc được phép sử dụng: đặt vào `audio/nhac-nen.mp3` → game phát file đó, không cần trình phát.
+- Đang dùng file `audio/tam-an-doi-nhe-nhang.m4a` (phát lặp lại, nhớ chỗ đang nghe). Muốn đổi bài: chép file vào `audio/` rồi sửa dòng `file:` trong `js/music.js`. Nếu file không tồn tại, game dùng YouTube.
 - Thêm `&nhac=1` vào link (vd. `http://localhost:8787/?live=1&nhac=1`) để tự bật nhạc khi mở trong OBS.
 
 ⚠️ Phát nhạc có bản quyền trên TikTok LIVE có thể bị tắt tiếng hoặc gỡ live. Nên dùng nhạc không bản quyền hoặc nhạc bạn được phép dùng.

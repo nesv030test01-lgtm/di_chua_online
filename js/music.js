@@ -1,13 +1,15 @@
 // Nhạc nền
-//  - Nếu có file  audio/nhac-nen.mp3  trong repo → phát file đó (lặp lại, không hiện trình phát)
+//  - Nếu có file nhạc (CFG.file) trong repo → phát file đó (lặp lại, nhớ vị trí đang nghe, không hiện trình phát)
 //  - Nếu không    → phát video YouTube bên dưới bằng trình phát nhúng (theo quy định của YouTube,
 //                   trình phát phải hiển thị, tối thiểu 200×200)
 // Thêm ?nhac=1 vào link để tự bật nhạc khi mở (dùng cho OBS).
 const CFG = {
   youtubeId: "MAUTcJMEroE",
-  file: "audio/nhac-nen.mp3",
+  file: "audio/tam-an-doi-nhe-nhang.m4a",
   volume: 40, // 0–100
 };
+
+const POS_KEY = "dichua-music-pos";
 
 export function initMusic(toast = () => {}) {
   const btn = document.getElementById("btn-music");
@@ -28,8 +30,16 @@ export function initMusic(toast = () => {}) {
     on = true; setBtn();
     if (mode === null) mode = (await hasFile()) ? "file" : "youtube";
     if (mode === "file") {
-      audio ||= Object.assign(new Audio(CFG.file), { loop: true, volume: CFG.volume / 100 });
-      audio.play().catch(() => { on = false; setBtn(); toast("Bấm 🎵 để bật nhạc"); });
+      if (!audio) {
+        audio = Object.assign(new Audio(CFG.file), { loop: true, volume: CFG.volume / 100, preload: "auto" });
+        // Nghe tiếp từ chỗ lần trước
+        try {
+          const t = Number(localStorage.getItem(POS_KEY));
+          if (t > 0) audio.addEventListener("loadedmetadata", () => { if (t < audio.duration - 5) audio.currentTime = t; }, { once: true });
+        } catch {}
+        setInterval(() => { if (!audio.paused) try { localStorage.setItem(POS_KEY, String(Math.floor(audio.currentTime))); } catch {} }, 5000);
+      }
+      audio.play().catch(() => { on = false; setBtn(); toast("Bấm 🎵 Bật nhạc để nghe"); });
     } else {
       openYouTube();
     }
