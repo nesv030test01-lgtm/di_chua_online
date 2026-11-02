@@ -19,7 +19,7 @@ const RULES = [
   [/xin xam|xin que|gieo que/, "xinXam"],
   [/chuong/, "chuong"],
   [/go mo/, "goMo"],
-  [/nam mo|a di da phat|adida|quan the am|quan am/, "niemPhat"],
+  [/nam mo|a di da phat|adida|quan the am|quan am|thich ca/, "niemPhat"],
 ];
 const XU_TO_CD = 10;           // 1 xu quà = 10 công đức
 const ACTIVE_MS = 10 * 60_000; // hiện người xem đã tương tác trong 10 phút gần nhất
@@ -30,7 +30,7 @@ const HINTS = [
   "💬 Bình luận “cầu an” để cầu phúc cho gia đình",
   "💬 Bình luận “xin xăm” để xin một quẻ",
   "🎁 Tặng quà để dâng hoa sen — quà càng lớn lễ càng long trọng",
-  "💬 Bình luận “chuông” hoặc “gõ mõ” • “Nam mô Quán Thế Âm Bồ Tát”",
+  "💬 Bình luận “chuông” hoặc “gõ mõ” • “Nam mô Bổn Sư Thích Ca Mâu Ni Phật”",
 ];
 
 const norm = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
@@ -239,7 +239,7 @@ export function startLive(ui, XAM, mode) {
 // ---- Dữ liệu giả để xem thử ----
 export function demoFeed(emit) {
   const names = ["Mai", "Tờ Yn", "mnhi", "Hải Phong", "Bé Dâu", "Nguyễn An", "NekoNiii", "Cục Vàng", "Tuyết", "Bi Tân", "Ánh Dương", "Minh Khang", "Thu Hà", "Gia Bảo", "Lan Chi"];
-  const chats = ["thắp hương", "cầu an cho mẹ khỏe", "xin xăm", "Nam mô Quán Thế Âm Bồ Tát", "gõ mõ", "chuông", "thắp hương ạ", "cầu an gia đình bình an", "hello", "đẹp quá"];
+  const chats = ["thắp hương", "cầu an cho mẹ khỏe", "xin xăm", "Nam mô Bổn Sư Thích Ca Mâu Ni Phật", "gõ mõ", "chuông", "thắp hương ạ", "cầu an gia đình bình an", "hello", "đẹp quá"];
   const gifts = [["Hoa hồng", 1], ["Hoa sen", 1], ["Kem", 1], ["Nhẫn", 5], ["Mũ", 99]];
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
   const user = () => { const n = pick(names); return { id: "demo-" + n, name: n, avatar: null }; };
