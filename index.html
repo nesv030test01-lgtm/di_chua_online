@@ -2,96 +2,195 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Đi Chùa Online</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Noto+Serif:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
 </head>
 <body>
-  <!-- Cảnh báo khi chưa cấu hình Firebase -->
-  <div id="config-warning" class="banner hidden">
+  <!-- Gradient dùng chung cho mọi hình SVG -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="g-gold" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#8a5a12"/><stop offset=".3" stop-color="#e9be52"/>
+        <stop offset=".5" stop-color="#fff0b0"/><stop offset=".7" stop-color="#e2ad3c"/>
+        <stop offset="1" stop-color="#7a4c0e"/>
+      </linearGradient>
+      <linearGradient id="g-gold-v" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffe9a0"/><stop offset=".6" stop-color="#d39a2e"/><stop offset="1" stop-color="#7a4c0e"/>
+      </linearGradient>
+      <radialGradient id="g-skin" cx=".42" cy=".35" r=".75">
+        <stop offset="0" stop-color="#fff5cc"/><stop offset=".55" stop-color="#f0c55a"/><stop offset="1" stop-color="#a8731a"/>
+      </radialGradient>
+      <linearGradient id="g-petal" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#8a1830"/><stop offset=".55" stop-color="#e0506a"/><stop offset="1" stop-color="#ffd6de"/>
+      </linearGradient>
+      <linearGradient id="g-pink" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#e86a8a"/><stop offset="1" stop-color="#ffe3ea"/>
+      </linearGradient>
+      <linearGradient id="g-robe" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#f7f4ee"/><stop offset="1" stop-color="#c4bcae"/>
+      </linearGradient>
+      <path id="petal" d="M0 0 C -22 -10 -24 -46 0 -62 C 24 -46 22 -10 0 0 Z"/>
+      <symbol id="lotus" viewBox="-16 -20 32 24">
+        <ellipse rx="4.5" ry="11" cy="-8" transform="rotate(-48)" fill="url(#g-pink)"/>
+        <ellipse rx="4.5" ry="11" cy="-8" transform="rotate(48)" fill="url(#g-pink)"/>
+        <ellipse rx="4.5" ry="12" cy="-9" transform="rotate(-24)" fill="url(#g-pink)"/>
+        <ellipse rx="4.5" ry="12" cy="-9" transform="rotate(24)" fill="url(#g-pink)"/>
+        <ellipse rx="5" ry="13" cy="-10" fill="url(#g-pink)"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div id="config-warning" class="banner-warn hidden">
     Chưa cấu hình Firebase. Mở <code>js/firebase-config.js</code> và dán config của bạn vào (xem README.md).
   </div>
 
-  <!-- Màn hình đăng nhập -->
+  <!-- ĐĂNG NHẬP -->
   <section id="screen-login" class="screen hidden">
     <div class="card login-card">
-      <div class="lotus">🪷</div>
+      <svg class="login-lotus" viewBox="0 0 32 24"><use href="#lotus"/></svg>
       <h1>Đi Chùa Online</h1>
       <p class="sub">Thắp nén hương, gõ hồi chuông, gửi lời nguyện cầu.</p>
-      <button id="btn-google" class="btn btn-google">
-        <span class="g">G</span> Đăng nhập bằng Google
-      </button>
+      <button id="btn-google" class="btn btn-google"><span class="g">G</span> Đăng nhập bằng Google</button>
       <button id="btn-guest" class="btn btn-ghost">Vào chùa với tư cách khách</button>
       <p class="note">Khách vẫn được lưu tiến trình. Bạn có thể liên kết Google sau để giữ dữ liệu khi đổi máy.</p>
       <p id="login-error" class="error"></p>
     </div>
   </section>
 
-  <!-- Màn hình trong chùa -->
+  <!-- TRONG CHÙA -->
   <section id="screen-temple" class="screen hidden">
-    <header class="topbar">
-      <div class="who">
-        <img id="avatar" class="avatar hidden" alt="" referrerpolicy="no-referrer" />
-        <div>
-          <div id="user-name" class="name">…</div>
-          <div id="user-type" class="type"></div>
-        </div>
-      </div>
-      <div class="stats">
-        <div class="stat"><span id="stat-congduc">0</span><small>Công đức</small></div>
-        <div class="stat"><span id="stat-huong">0</span><small>Nén hương</small></div>
-        <div class="stat"><span id="stat-chuong">0</span><small>Hồi chuông</small></div>
-      </div>
-      <div class="actions-top">
-        <button id="btn-link" class="btn btn-small btn-google hidden">Liên kết Google</button>
-        <button id="btn-logout" class="btn btn-small btn-ghost">Đăng xuất</button>
-      </div>
-    </header>
+    <div class="stage" id="stage">
+      <!-- Khung cảnh -->
+      <div class="wall"></div>
+      <div class="panel p-left"></div><div class="panel p-right"></div>
+      <div class="pillar left"></div><div class="pillar right"></div>
+      <div class="lantern l1"></div><div class="lantern l2"></div>
+      <div class="lantern l3"></div><div class="lantern l4"></div>
 
-    <main class="temple">
-      <div class="scene">
-        <svg class="pagoda" viewBox="0 0 300 220" aria-hidden="true">
-          <path d="M20 90 Q150 30 280 90 L260 95 Q150 55 40 95 Z" fill="#7a1f1f"/>
-          <path d="M20 90 Q10 80 4 70 Q20 82 40 88 Z" fill="#7a1f1f"/>
-          <path d="M280 90 Q290 80 296 70 Q280 82 260 88 Z" fill="#7a1f1f"/>
-          <rect x="55" y="95" width="190" height="16" fill="#c9a24a"/>
-          <path d="M40 130 Q150 95 260 130 L245 134 Q150 108 55 134 Z" fill="#8f2a24"/>
-          <rect x="70" y="134" width="160" height="80" fill="#a8432f"/>
-          <rect x="125" y="150" width="50" height="64" rx="25" fill="#3b120f"/>
-          <rect x="80" y="150" width="30" height="30" fill="#e8c76a" opacity=".85"/>
-          <rect x="190" y="150" width="30" height="30" fill="#e8c76a" opacity=".85"/>
-          <circle cx="150" cy="72" r="6" fill="#e8c76a"/>
+      <div class="buddha-wrap">
+        <div id="halo" class="halo"></div>
+        <div class="halo-rays"></div>
+        <div class="halo-ring"></div>
+        <svg class="buddha" viewBox="0 0 400 440" aria-label="Tượng Phật">
+          <!-- Đài sen -->
+          <ellipse cx="200" cy="412" rx="160" ry="24" fill="#5a0c16"/>
+          <g fill="url(#g-petal)" stroke="#f3cf6a" stroke-width="2">
+            <use href="#petal" transform="translate(80 392) scale(.85)"/>
+            <use href="#petal" transform="translate(120 388) scale(.9)"/>
+            <use href="#petal" transform="translate(160 386) scale(.95)"/>
+            <use href="#petal" transform="translate(200 385) scale(.95)"/>
+            <use href="#petal" transform="translate(240 386) scale(.95)"/>
+            <use href="#petal" transform="translate(280 388) scale(.9)"/>
+            <use href="#petal" transform="translate(320 392) scale(.85)"/>
+            <use href="#petal" transform="translate(60 418)"/>
+            <use href="#petal" transform="translate(105 422)"/>
+            <use href="#petal" transform="translate(152 424)"/>
+            <use href="#petal" transform="translate(200 425)"/>
+            <use href="#petal" transform="translate(248 424)"/>
+            <use href="#petal" transform="translate(295 422)"/>
+            <use href="#petal" transform="translate(340 418)"/>
+          </g>
+          <!-- Thân, chân -->
+          <path d="M66 366 Q74 300 200 296 Q326 300 334 366 Q200 392 66 366 Z" fill="url(#g-gold)"/>
+          <path d="M138 176 Q200 160 262 176 L294 312 Q200 334 106 312 Z" fill="url(#g-gold)"/>
+          <path d="M143 180 Q192 232 276 304 L254 314 Q180 252 138 198 Z" fill="#fff0b8" opacity=".45"/>
+          <path d="M96 352 Q200 330 304 352" stroke="#8a5a12" stroke-width="2" fill="none" opacity=".6"/>
+          <path d="M120 336 Q200 318 280 336" stroke="#fff3c4" stroke-width="2" fill="none" opacity=".5"/>
+          <!-- Tay + ánh sáng trong tay -->
+          <ellipse cx="200" cy="300" rx="50" ry="17" fill="url(#g-skin)"/>
+          <circle cx="200" cy="286" r="16" fill="#fff6c8" opacity=".55"/>
+          <circle cx="200" cy="288" r="8" fill="#fffbe6"/>
+          <!-- Cổ, tai, đầu -->
+          <rect x="187" y="148" width="26" height="32" rx="6" fill="url(#g-skin)"/>
+          <path d="M190 166 Q200 170 210 166" stroke="#a8731a" stroke-width="1.4" fill="none"/>
+          <ellipse cx="160" cy="120" rx="8" ry="25" fill="url(#g-skin)"/>
+          <ellipse cx="240" cy="120" rx="8" ry="25" fill="url(#g-skin)"/>
+          <ellipse cx="200" cy="114" rx="38" ry="45" fill="url(#g-skin)"/>
+          <!-- Tóc + nhục kế -->
+          <path d="M161 106 Q158 60 200 56 Q242 60 239 106 Q222 84 200 85 Q178 84 161 106 Z" fill="#2c2f4a"/>
+          <ellipse cx="200" cy="56" rx="19" ry="15" fill="#2c2f4a"/>
+          <ellipse cx="200" cy="41" rx="6" ry="7" fill="url(#g-gold-v)"/>
+          <g fill="#3d4266">
+            <circle cx="176" cy="78" r="3"/><circle cx="188" cy="70" r="3"/><circle cx="200" cy="68" r="3"/>
+            <circle cx="212" cy="70" r="3"/><circle cx="224" cy="78" r="3"/><circle cx="194" cy="52" r="2.6"/><circle cx="206" cy="52" r="2.6"/>
+          </g>
+          <!-- Khuôn mặt -->
+          <g stroke="#8a5a12" stroke-width="1.8" fill="none" stroke-linecap="round">
+            <path d="M177 106 Q186 100 195 106"/><path d="M205 106 Q214 100 223 106"/>
+            <path d="M179 117 Q186 121 193 117"/><path d="M207 117 Q214 121 221 117"/>
+            <path d="M200 112 L197 131 Q200 134 203 131"/>
+            <path d="M192 142 Q200 147 208 142"/>
+          </g>
+          <circle cx="200" cy="99" r="2.4" fill="#c0392b"/>
         </svg>
-
-        <div class="altar">
-          <div id="incense" class="incense"></div>
-          <div class="bowl"></div>
-        </div>
-        <div id="float-layer" class="float-layer"></div>
       </div>
 
-      <div class="controls">
-        <button id="btn-huong" class="btn btn-action">🕯️ Thắp hương <small>+3</small></button>
-        <button id="btn-chuong" class="btn btn-action">🔔 Gõ chuông <small>+1</small></button>
+      <svg class="vase v-left" viewBox="0 0 80 110"><use href="#vase"/></svg>
+      <svg class="vase v-right" viewBox="0 0 80 110"><use href="#vase"/></svg>
+      <svg width="0" height="0" style="position:absolute">
+        <symbol id="vase" viewBox="0 0 80 110">
+          <path d="M40 66 Q14 48 6 22 Q28 30 40 60" fill="#2f6a30"/>
+          <path d="M40 66 Q66 48 74 22 Q52 30 40 60" fill="#3c7a3a"/>
+          <path d="M40 70 L28 30 M40 70 L40 18 M40 70 L54 32" stroke="#2b5a28" stroke-width="2"/>
+          <use href="#lotus" x="14" y="14" width="28" height="22"/>
+          <use href="#lotus" x="26" y="2" width="28" height="22"/>
+          <use href="#lotus" x="40" y="16" width="28" height="22"/>
+          <path d="M28 70 Q20 82 25 96 Q30 108 40 108 Q50 108 55 96 Q60 82 52 70 Z" fill="url(#g-gold)"/>
+          <rect x="26" y="66" width="28" height="6" rx="2" fill="url(#g-gold-v)"/>
+        </symbol>
+      </svg>
+
+      <div class="altar-table"></div>
+      <div class="candle c1"></div><div class="candle c2"></div>
+      <div class="censer">
+        <div id="incense" class="incense"></div>
+        <div class="bowl"></div>
       </div>
 
-      <div class="card prayer-card">
-        <h2>Lời nguyện cầu</h2>
-        <textarea id="prayer-text" maxlength="300" rows="3" placeholder="Con xin cầu cho gia đình bình an…"></textarea>
-        <div class="row">
-          <span id="prayer-count" class="muted">0/300</span>
-          <button id="btn-pray" class="btn btn-action">🙏 Gửi lời nguyện <small>+5</small></button>
-        </div>
-        <ul id="prayer-list" class="prayer-list"></ul>
+      <div class="floor"></div>
+      <div class="carpet"></div>
+      <div class="carpet-inner"></div>
+
+      <div id="people" class="people"></div>
+      <div id="petals" class="petals"></div>
+      <div id="float-layer" class="float-layer"></div>
+
+      <!-- Giao diện -->
+      <div class="hud-top">
+        <div class="pill live"><span class="dot"></span><b id="online-count">1</b>&nbsp;người đang viếng</div>
+        <div class="pill totals">🔥 <b id="tot-huong">0</b> hương • ✨ <b id="tot-cd">0</b> CĐ</div>
       </div>
-    </main>
+      <button id="btn-me" class="pill me-pill">
+        <img id="me-ava" class="ava hidden" alt="" referrerpolicy="no-referrer" />
+        <span id="me-name">…</span> · <b id="me-cd">0</b> CĐ ▾
+      </button>
+
+      <div class="board">
+        <h3>TẤM LÒNG THÀNH</h3>
+        <ol id="board-list"></ol>
+      </div>
+
+      <button class="pill side s-chuong" data-action="chuong">🔔 Thỉnh chuông</button>
+      <button class="pill side s-xam" data-action="xinXam">🎋 Xin xăm</button>
+      <button class="pill side s-mo" data-action="goMo">🪵 Gõ mõ (<span id="tot-mo">0</span>)</button>
+
+      <div id="banner" class="banner-evt"></div>
+
+      <div class="bottom-bar">
+        <button class="big" data-action="dangHuong"><small>+5 CÔNG ĐỨC</small><span class="ico">🔥</span>Dâng hương</button>
+        <button class="big" data-action="cauPhuc"><small>+5 CÔNG ĐỨC</small><span class="ico">🏮</span>Cầu phúc</button>
+        <button class="big" data-action="hoaSen"><small>+3 CÔNG ĐỨC</small><span class="ico">🪷</span>Hoa sen</button>
+      </div>
+    </div>
   </section>
 
+  <div id="modal" class="modal hidden"><div id="modal-card" class="modal-card"></div></div>
   <div id="toast" class="toast"></div>
   <div id="loading" class="loading">Đang mở cửa chùa…</div>
 
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>
