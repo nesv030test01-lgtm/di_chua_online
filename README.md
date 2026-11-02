@@ -90,3 +90,12 @@ Cách chạy:
 4. Xem thử không cần live: `node server.js --demo`, hoặc mở trang web với `?live=demo`.
 
 Lưu ý: thư viện đọc live (`tiktok-live-connector`) là thư viện **không chính thức**; TikTok có thể đổi giao thức khiến nó ngừng chạy tạm thời. Điểm/xếp hạng LIVE lưu trong trình duyệt theo ngày (không lên Firebase).
+
+## 🎵 Nhạc nền
+
+Bấm nút **🎵 Bật nhạc** (góc trên bên phải). Cấu hình ở đầu file `js/music.js`:
+- Mặc định phát video YouTube bằng trình phát nhúng nhỏ (kéo thanh tiêu đề để di chuyển, ✕ để tắt). Theo quy định của YouTube, trình phát phải hiển thị, không được ẩn hay tách lấy âm thanh.
+- Nếu bạn có file nhạc được phép sử dụng: đặt vào `audio/nhac-nen.mp3` → game phát file đó, không cần trình phát.
+- Thêm `&nhac=1` vào link (vd. `http://localhost:8787/?live=1&nhac=1`) để tự bật nhạc khi mở trong OBS.
+
+⚠️ Phát nhạc có bản quyền trên TikTok LIVE có thể bị tắt tiếng hoặc gỡ live. Nên dùng nhạc không bản quyền hoặc nhạc bạn được phép dùng.

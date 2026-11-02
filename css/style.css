@@ -335,3 +335,15 @@ h1 { font-family: "Noto Serif", serif; color: var(--gold); margin: 6px 0; }
 .live-mode .me-pill { cursor: default; }
 .me-pill.is-live { border-color: #ff3b5c; background: rgba(120, 10, 25, .8); }
 .live-mode .big small { font-size: 9.5px; letter-spacing: .3px; }
+
+/* ---------- Nhạc nền ---------- */
+.music-pill { top: calc(42px + env(safe-area-inset-top)); right: 8px; z-index: 50; }
+.music-pill.on { border-color: var(--gold); color: var(--gold); }
+.yt-panel {
+  left: 8px; top: calc(80px + env(safe-area-inset-top)); z-index: 70; touch-action: none;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,.6);
+}
+.yt-head { cursor: move; display: flex; justify-content: space-between; align-items: center; padding: 4px 6px 4px 10px; font-size: 12px; color: var(--gold); }
+.yt-head button { background: none; border: none; font-size: 14px; padding: 2px 6px; }
+.yt-panel iframe { display: block; width: 200px; height: 200px; }

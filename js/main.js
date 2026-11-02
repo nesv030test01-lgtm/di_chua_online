@@ -21,10 +21,17 @@ const errMsg = (e) =>
 
 const liveMode = new URLSearchParams(location.search).get("live");
 
+let musicReady = false;
+async function startMusic(toast) {
+  if (musicReady) return;
+  musicReady = true;
+  try { (await import(`./music.js?v=${V}`)).initMusic(toast); } catch (e) { console.warn(e); }
+}
+
 if (liveMode !== null) {
   // Chế độ LIVE TikTok — không cần đăng nhập/Firebase
   Promise.all([import(`./ui.js?v=${V}`), import(`./xam.js?v=${V}`), import(`./live.js?v=${V}`)])
-    .then(([ui, { XAM }, live]) => { show("screen-temple"); live.startLive(ui, XAM, liveMode); })
+    .then(([ui, { XAM }, live]) => { show("screen-temple"); live.startLive(ui, XAM, liveMode); startMusic(ui.toast); })
     .catch((e) => { console.error(e); $("loading").textContent = "Không tải được chế độ LIVE."; });
 } else if (!isConfigured) {
   $("config-warning").classList.remove("hidden");
@@ -73,6 +80,7 @@ async function start() {
     me = { uid: u.uid, ...data };
 
     show("screen-temple");
+    startMusic(ui.toast);
     ui.initPetals();
     if (!$("incense").childElementCount) for (let i = 0; i < 3; i++) ui.addIncense(true);
     ui.renderMe(me);
