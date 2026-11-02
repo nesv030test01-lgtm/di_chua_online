@@ -274,7 +274,7 @@ async function start() {
           h("p", { class: "giai" }, "Lời giải: " + q.giai),
           h("p", { class: "disc" }, "Quẻ mang tính giải trí — tâm an là phúc."),
         ),
-        h("button", { class: "btn btn-gold", onclick: ui.closeModal }, "Nam mô A Di Đà Phật 🙏"),
+        h("button", { class: "btn btn-gold", onclick: ui.closeModal }, "Nam mô Quán Thế Âm Bồ Tát 🙏"),
       );
       doAct("xinXam");
       ui.unlockModal(); // có quẻ rồi thì cho phép bấm ra ngoài để đóng

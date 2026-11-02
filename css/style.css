@@ -99,7 +99,7 @@ h1 { font-family: "Noto Serif", serif; color: var(--gold); margin: 6px 0; }
   transform: translate(-50%, -50%);
 }
 .halo {
-  background: radial-gradient(circle, rgba(255,244,190,.95) 0 14%, rgba(255,210,100,.6) 28%, rgba(230,150,40,.25) 48%, transparent 68%);
+  background: radial-gradient(circle, rgba(255,255,246,.97) 0 15%, rgba(255,238,200,.65) 30%, rgba(240,190,120,.25) 50%, transparent 68%);
   transition: filter .3s;
 }
 .halo.flash { animation: flash 1.2s ease-out; }
@@ -112,7 +112,7 @@ h1 { font-family: "Noto Serif", serif; color: var(--gold); margin: 6px 0; }
 }
 @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 .halo-ring {
-  left: 50%; top: 25%; width: 42%; aspect-ratio: 1; border-radius: 50%;
+  left: 50%; top: 23%; width: 40%; aspect-ratio: 1; border-radius: 50%;
   transform: translate(-50%, -50%);
   border: 3px solid rgba(255, 224, 140, .75);
   box-shadow: 0 0 0 6px rgba(255, 224, 140, .15), 0 0 30px rgba(255, 220, 130, .6);

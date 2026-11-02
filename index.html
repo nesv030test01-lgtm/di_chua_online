@@ -6,7 +6,7 @@
   <title>Đi Chùa Online</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Noto+Serif:wght@700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=3" />
+  <link rel="stylesheet" href="css/style.css?v=4" />
 </head>
 <body>
   <!-- Gradient dùng chung cho mọi hình SVG -->
@@ -31,6 +31,19 @@
       </linearGradient>
       <linearGradient id="g-robe" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#f7f4ee"/><stop offset="1" stop-color="#c4bcae"/>
+      </linearGradient>
+      <linearGradient id="g-robe-w" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#cdd5df"/><stop offset=".42" stop-color="#ffffff"/>
+        <stop offset=".62" stop-color="#f3f6fa"/><stop offset="1" stop-color="#bfc8d4"/>
+      </linearGradient>
+      <radialGradient id="g-skin-qa" cx=".45" cy=".38" r=".75">
+        <stop offset="0" stop-color="#fff6ee"/><stop offset=".6" stop-color="#f7dcc9"/><stop offset="1" stop-color="#dcae95"/>
+      </radialGradient>
+      <linearGradient id="g-petal-qa" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0" stop-color="#c2185b"/><stop offset=".55" stop-color="#f06d94"/><stop offset="1" stop-color="#ffe6ee"/>
+      </linearGradient>
+      <linearGradient id="g-jade" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#a9d3c3"/><stop offset=".45" stop-color="#f4fbf7"/><stop offset="1" stop-color="#9ccab8"/>
       </linearGradient>
       <path id="petal" d="M0 0 C -22 -10 -24 -46 0 -62 C 24 -46 22 -10 0 0 Z"/>
       <symbol id="lotus" viewBox="-16 -20 32 24">
@@ -74,57 +87,89 @@
         <div id="halo" class="halo"></div>
         <div class="halo-rays"></div>
         <div class="halo-ring"></div>
-        <svg class="buddha" viewBox="0 0 400 440" aria-label="Tượng Phật">
+        <svg class="buddha" viewBox="0 0 400 440" aria-label="Bồ Tát Quán Thế Âm">
           <!-- Đài sen -->
-          <ellipse cx="200" cy="412" rx="160" ry="24" fill="#5a0c16"/>
-          <g fill="url(#g-petal)" stroke="#f3cf6a" stroke-width="2">
-            <use href="#petal" transform="translate(80 392) scale(.85)"/>
-            <use href="#petal" transform="translate(120 388) scale(.9)"/>
-            <use href="#petal" transform="translate(160 386) scale(.95)"/>
-            <use href="#petal" transform="translate(200 385) scale(.95)"/>
-            <use href="#petal" transform="translate(240 386) scale(.95)"/>
-            <use href="#petal" transform="translate(280 388) scale(.9)"/>
-            <use href="#petal" transform="translate(320 392) scale(.85)"/>
-            <use href="#petal" transform="translate(60 418)"/>
-            <use href="#petal" transform="translate(105 422)"/>
+          <ellipse cx="200" cy="414" rx="160" ry="22" fill="#7a1a3c"/>
+          <g fill="url(#g-petal-qa)" stroke="#ffd6e2" stroke-width="1.6">
+            <use href="#petal" transform="translate(90 388) scale(.8)"/>
+            <use href="#petal" transform="translate(130 384) scale(.85)"/>
+            <use href="#petal" transform="translate(170 382) scale(.9)"/>
+            <use href="#petal" transform="translate(230 382) scale(.9)"/>
+            <use href="#petal" transform="translate(270 384) scale(.85)"/>
+            <use href="#petal" transform="translate(310 388) scale(.8)"/>
+            <use href="#petal" transform="translate(200 383) scale(.92)"/>
+            <use href="#petal" transform="translate(58 418) rotate(-14)"/>
+            <use href="#petal" transform="translate(104 422) rotate(-7)"/>
             <use href="#petal" transform="translate(152 424)"/>
-            <use href="#petal" transform="translate(200 425)"/>
             <use href="#petal" transform="translate(248 424)"/>
-            <use href="#petal" transform="translate(295 422)"/>
-            <use href="#petal" transform="translate(340 418)"/>
+            <use href="#petal" transform="translate(296 422) rotate(7)"/>
+            <use href="#petal" transform="translate(342 418) rotate(14)"/>
+            <use href="#petal" transform="translate(200 428) scale(1.05)"/>
           </g>
-          <!-- Thân, chân -->
-          <path d="M66 366 Q74 300 200 296 Q326 300 334 366 Q200 392 66 366 Z" fill="url(#g-gold)"/>
-          <path d="M138 176 Q200 160 262 176 L294 312 Q200 334 106 312 Z" fill="url(#g-gold)"/>
-          <path d="M143 180 Q192 232 276 304 L254 314 Q180 252 138 198 Z" fill="#fff0b8" opacity=".45"/>
-          <path d="M96 352 Q200 330 304 352" stroke="#8a5a12" stroke-width="2" fill="none" opacity=".6"/>
-          <path d="M120 336 Q200 318 280 336" stroke="#fff3c4" stroke-width="2" fill="none" opacity=".5"/>
-          <!-- Tay + ánh sáng trong tay -->
-          <ellipse cx="200" cy="300" rx="50" ry="17" fill="url(#g-skin)"/>
-          <circle cx="200" cy="286" r="16" fill="#fff6c8" opacity=".55"/>
-          <circle cx="200" cy="288" r="8" fill="#fffbe6"/>
-          <!-- Cổ, tai, đầu -->
-          <rect x="187" y="148" width="26" height="32" rx="6" fill="url(#g-skin)"/>
-          <path d="M190 166 Q200 170 210 166" stroke="#a8731a" stroke-width="1.4" fill="none"/>
-          <ellipse cx="160" cy="120" rx="8" ry="25" fill="url(#g-skin)"/>
-          <ellipse cx="240" cy="120" rx="8" ry="25" fill="url(#g-skin)"/>
-          <ellipse cx="200" cy="114" rx="38" ry="45" fill="url(#g-skin)"/>
-          <!-- Tóc + nhục kế -->
-          <path d="M161 106 Q158 60 200 56 Q242 60 239 106 Q222 84 200 85 Q178 84 161 106 Z" fill="#2c2f4a"/>
-          <ellipse cx="200" cy="56" rx="19" ry="15" fill="#2c2f4a"/>
-          <ellipse cx="200" cy="41" rx="6" ry="7" fill="url(#g-gold-v)"/>
-          <g fill="#3d4266">
-            <circle cx="176" cy="78" r="3"/><circle cx="188" cy="70" r="3"/><circle cx="200" cy="68" r="3"/>
-            <circle cx="212" cy="70" r="3"/><circle cx="224" cy="78" r="3"/><circle cx="194" cy="52" r="2.6"/><circle cx="206" cy="52" r="2.6"/>
+          <!-- Khăn choàng phía sau -->
+          <path d="M150 98 Q148 44 200 38 Q252 44 250 98 Q262 160 286 198 L114 198 Q138 160 150 98 Z" fill="url(#g-robe-w)"/>
+          <!-- Chân, vạt áo -->
+          <path d="M62 372 Q70 296 200 288 Q330 296 338 372 Q200 400 62 372 Z" fill="url(#g-robe-w)"/>
+          <g stroke="#c3cbd6" stroke-width="2" fill="none">
+            <path d="M100 362 Q150 330 200 338"/><path d="M300 362 Q250 330 200 338"/>
+            <path d="M128 378 Q200 362 272 378"/>
           </g>
+          <!-- Thân -->
+          <path d="M136 178 Q200 162 264 178 L294 312 Q200 336 106 312 Z" fill="url(#g-robe-w)"/>
+          <g stroke="#c8d0db" stroke-width="2" fill="none">
+            <path d="M152 204 Q162 262 142 306"/><path d="M248 204 Q238 262 258 306"/>
+          </g>
+          <path d="M178 180 Q200 176 222 180 L210 238 Q200 246 190 238 Z" fill="#9b2335"/>
+          <path d="M178 180 L190 238 Q200 246 210 238 L222 180" stroke="#e7c164" stroke-width="2" fill="none"/>
+          <path d="M174 186 Q200 216 226 186" stroke="url(#g-gold-v)" stroke-width="3" fill="none"/>
+          <circle cx="200" cy="215" r="7" fill="#c0392b" stroke="#f2cf6b" stroke-width="2"/>
+          <!-- Dải lụa -->
+          <g stroke="#8cc3bd" stroke-width="5" fill="none" opacity=".85" stroke-linecap="round">
+            <path d="M140 192 Q116 252 130 326"/><path d="M260 192 Q286 252 270 326"/>
+          </g>
+          <!-- Tay trái giơ lên cầm cành dương liễu -->
+          <path d="M140 186 Q116 230 126 264 Q140 274 152 264 Q150 238 162 214 Z" fill="url(#g-robe-w)"/>
+          <path d="M126 262 Q108 292 122 316 Q140 302 152 262 Z" fill="#eef1f5"/>
+          <path d="M158 202 Q150 160 130 126" stroke="#5b7f3a" stroke-width="2.2" fill="none"/>
+          <g fill="#76a34a">
+            <ellipse cx="155" cy="182" rx="2.6" ry="8" transform="rotate(-30 155 182)"/>
+            <ellipse cx="151" cy="168" rx="2.6" ry="8" transform="rotate(35 151 168)"/>
+            <ellipse cx="145" cy="155" rx="2.6" ry="8" transform="rotate(-50 145 155)"/>
+            <ellipse cx="139" cy="142" rx="2.6" ry="8" transform="rotate(20 139 142)"/>
+            <ellipse cx="133" cy="131" rx="2.4" ry="7" transform="rotate(-40 133 131)"/>
+          </g>
+          <ellipse cx="157" cy="208" rx="9" ry="13" transform="rotate(-15 157 208)" fill="url(#g-skin-qa)"/>
+          <!-- Bình tịnh thủy trên tay phải -->
+          <path d="M197 238 L203 238 L204 258 L196 258 Z" fill="url(#g-jade)"/>
+          <ellipse cx="200" cy="238" rx="6" ry="2.4" fill="#e2b245"/>
+          <path d="M200 256 Q217 264 215 284 Q213 300 200 300 Q187 300 185 284 Q183 264 200 256 Z" fill="url(#g-jade)" stroke="#d9b45a" stroke-width="1.5"/>
+          <ellipse cx="200" cy="301" rx="30" ry="9" fill="url(#g-skin-qa)"/>
+          <!-- Cổ, tóc sau, mặt -->
+          <rect x="189" y="144" width="22" height="32" rx="6" fill="url(#g-skin-qa)"/>
+          <path d="M162 100 Q160 64 200 60 Q240 64 238 100 L240 146 Q226 114 200 110 Q174 114 160 146 Z" fill="#1e1a22"/>
+          <path d="M167 104 Q167 70 200 68 Q233 70 233 104 Q233 140 200 154 Q167 140 167 104 Z" fill="url(#g-skin-qa)"/>
+          <path d="M167 100 Q170 70 200 66 Q230 70 233 100 Q222 82 200 79 Q178 82 167 100 Z" fill="#1e1a22"/>
+          <ellipse cx="200" cy="56" rx="18" ry="14" fill="#1e1a22"/>
+          <!-- Khăn trùm đầu + mũ miện -->
+          <path d="M159 100 Q154 50 200 44 Q246 50 241 100 Q237 70 200 62 Q163 70 159 100 Z" fill="url(#g-robe-w)"/>
+          <path d="M182 60 L188 46 L194 56 L200 40 L206 56 L212 46 L218 60 Q200 66 182 60 Z" fill="url(#g-gold-v)" stroke="#a8731a" stroke-width="1"/>
+          <circle cx="200" cy="54" r="3" fill="#c0392b"/>
+          <!-- Tóc xõa vai, hoa tai -->
+          <g stroke="#1e1a22" stroke-width="5" fill="none" stroke-linecap="round">
+            <path d="M168 116 Q158 160 166 206"/><path d="M232 116 Q242 160 234 206"/>
+          </g>
+          <circle cx="169" cy="130" r="2.6" fill="#e2b245"/><circle cx="231" cy="130" r="2.6" fill="#e2b245"/>
           <!-- Khuôn mặt -->
-          <g stroke="#8a5a12" stroke-width="1.8" fill="none" stroke-linecap="round">
-            <path d="M177 106 Q186 100 195 106"/><path d="M205 106 Q214 100 223 106"/>
-            <path d="M179 117 Q186 121 193 117"/><path d="M207 117 Q214 121 221 117"/>
-            <path d="M200 112 L197 131 Q200 134 203 131"/>
-            <path d="M192 142 Q200 147 208 142"/>
+          <g fill="none" stroke-linecap="round">
+            <path d="M178 99 Q186 94 194 98" stroke="#4a3a35" stroke-width="1.5"/>
+            <path d="M206 98 Q214 94 222 99" stroke="#4a3a35" stroke-width="1.5"/>
+            <path d="M180 109 Q186 113 193 109" stroke="#3a2a28" stroke-width="1.8"/>
+            <path d="M207 109 Q214 113 220 109" stroke="#3a2a28" stroke-width="1.8"/>
+            <path d="M200 108 L198 123 Q200 125 202 123" stroke="#c99880" stroke-width="1.4"/>
           </g>
-          <circle cx="200" cy="99" r="2.4" fill="#c0392b"/>
+          <ellipse cx="183" cy="124" rx="7" ry="4" fill="#f4a0a0" opacity=".35"/><ellipse cx="217" cy="124" rx="7" ry="4" fill="#f4a0a0" opacity=".35"/>
+          <path d="M193 135 Q200 131 207 135 Q200 140 193 135 Z" fill="#d0485e"/>
+          <circle cx="200" cy="91" r="2.2" fill="#c0392b"/>
         </svg>
       </div>
 
@@ -191,6 +236,6 @@
   <div id="toast" class="toast"></div>
   <div id="loading" class="loading">Đang mở cửa chùa…</div>
 
-  <script type="module" src="js/main.js?v=3"></script>
+  <script type="module" src="js/main.js?v=4"></script>
 </body>
 </html>
